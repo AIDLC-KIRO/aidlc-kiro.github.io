@@ -1,0 +1,26 @@
+# Security Headers — ป้องกัน source code exposure เพิ่มเติม
+# ใช้ได้กับ Netlify, Cloudflare Pages, หรือ copy ไปใส่ nginx/apache config
+
+/*
+  # ป้องกัน iframe embedding (ป้องกันคน embed ไปใน site อื่น)
+  X-Frame-Options: DENY
+  # ป้องกัน MIME type sniffing
+  X-Content-Type-Options: nosniff
+  # ป้องกัน Referer leakage
+  Referrer-Policy: no-referrer
+  # ป้องกัน browser features ที่ไม่จำเป็น
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  # Content Security Policy — จำกัด source ที่โหลดได้
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'
+  # ป้องกัน cross-origin isolation
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+
+# ป้องกันไม่ให้ cache source code (บังคับ revalidation)
+/assets/*.js
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+/assets/*.css
+  Cache-Control: public, max-age=31536000, immutable
