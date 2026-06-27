@@ -1,25 +1,105 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/aidlc-deck/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kiro + AI-DLC v2 — เปลี่ยนไอเดียให้เป็น Spec</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/aidlc-deck/assets/Cm2PT1jI.js"></script>
-    <link rel="modulepreload" crossorigin href="/aidlc-deck/assets/CElvxv18.js">
-    <link rel="modulepreload" crossorigin href="/aidlc-deck/assets/CLqLUNEX.js">
-    <link rel="modulepreload" crossorigin href="/aidlc-deck/assets/BDyRxnKj.js">
-    <link rel="modulepreload" crossorigin href="/aidlc-deck/assets/rg8382y_.js">
-    <link rel="modulepreload" crossorigin href="/aidlc-deck/assets/jQ9iHKEo.js">
-    <link rel="stylesheet" crossorigin href="/aidlc-deck/assets/D8JDK-oK.css">
-    <link rel="stylesheet" crossorigin href="/aidlc-deck/assets/CGtsyPX0.css">
-  </head>
-  <body>
-    <div id="root"></div>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>🔒 AI-DLC × Kiro — Protected</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🔒</text></svg>"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0a0a0a;color:#f5f5f7;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.unlock-container{text-align:center;padding:2rem;max-width:420px;width:100%}
+.lock-icon{font-size:56px;margin-bottom:1.5rem;filter:drop-shadow(0 0 20px rgba(59,130,246,0.3))}
+h1{font-size:1.6rem;font-weight:700;margin-bottom:0.5rem;letter-spacing:-0.02em}
+.subtitle{color:#86868b;font-size:0.875rem;margin-bottom:2rem;line-height:1.6}
+.input-group{position:relative;margin-bottom:1rem}
+input[type="password"]{width:100%;padding:1rem 1.25rem;border-radius:14px;border:1.5px solid #333;background:#1c1c1e;color:#f5f5f7;font-size:1rem;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+input[type="password"]:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.15)}
+input[type="password"]::placeholder{color:#555}
+button{width:100%;padding:1rem;border-radius:14px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 12px rgba(59,130,246,0.3)}
+button:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,0.4)}
+button:active{transform:translateY(0)}
+button:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.error{color:#ef4444;font-size:0.8rem;margin-top:0.75rem;display:none;animation:shake 0.3s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.loading{display:none;color:#86868b;font-size:0.85rem;margin-top:1rem}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid #333;border-top-color:#3b82f6;border-radius:50%;animation:spin 0.6s linear infinite;margin-right:0.5rem;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.footer{margin-top:3rem;color:#444;font-size:0.7rem}
+</style>
+</head>
+<body>
+<div class="unlock-container">
+<div class="lock-icon">🔐</div>
+<h1>Protected Presentation</h1>
+<p class="subtitle">เนื้อหานี้ถูกเข้ารหัสไว้สำหรับผู้ที่มีสิทธิ์เท่านั้น<br/>กรุณากรอก Passkey เพื่อเข้าถึง</p>
+<form id="unlock-form">
+<div class="input-group">
+<input type="password" id="passkey-input" placeholder="Enter passkey..." autocomplete="off" autofocus/>
+</div>
+<button type="submit" id="unlock-btn">🔓 Unlock</button>
+</form>
+<div class="error" id="error-msg">❌ Passkey ไม่ถูกต้อง กรุณาลองใหม่</div>
+<div class="loading" id="loading-msg"><span class="spinner"></span>กำลังถอดรหัส...</div>
+<p class="footer">Encrypted with AES-256-GCM · PBKDF2 600K iterations</p>
+</div>
 
-  <script>!function(){document.addEventListener("contextmenu",function(e){e.preventDefault()}),document.addEventListener("keydown",function(e){if("F12"===e.key||e.ctrlKey&&e.shiftKey&&("I"===e.key||"J"===e.key)||e.ctrlKey&&("u"===e.key||"U"===e.key||"s"===e.key||"S"===e.key))return e.preventDefault(),!1}),document.addEventListener("dragstart",function(e){e.preventDefault()})}();</script>
+<script id="__ENCRYPTED_PAYLOAD__" type="application/octet-stream">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</script>
+
+<script>
+(function(){
+  async function deriveKey(passkey,salt){
+    const enc=new TextEncoder();
+    const km=await crypto.subtle.importKey('raw',enc.encode(passkey),'PBKDF2',false,['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:600000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  }
+
+  function b64ToUint8(b64){
+    const bin=atob(b64);
+    const arr=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+    return arr;
+  }
+
+  async function decrypt(packed,passkey){
+    const data=b64ToUint8(packed);
+    const salt=data.slice(0,16);
+    const iv=data.slice(16,28);
+    const ct=data.slice(28);
+    const key=await deriveKey(passkey,salt);
+    const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct);
+    return new TextDecoder().decode(plain);
+  }
+
+  const form=document.getElementById('unlock-form');
+  const input=document.getElementById('passkey-input');
+  const errEl=document.getElementById('error-msg');
+  const loadEl=document.getElementById('loading-msg');
+  const btn=document.getElementById('unlock-btn');
+
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    const passkey=input.value.trim();
+    if(!passkey)return;
+    errEl.style.display='none';
+    loadEl.style.display='block';
+    btn.disabled=true;
+
+    try{
+      const payload=document.getElementById('__ENCRYPTED_PAYLOAD__').textContent;
+      const html=await decrypt(payload,passkey);
+      // Replace entire document with decrypted content
+      document.open();
+      document.write(html);
+      document.close();
+    }catch(err){
+      loadEl.style.display='none';
+      errEl.style.display='block';
+      btn.disabled=false;
+      input.select();
+    }
+  });
+})();
+</script>
 </body>
 </html>
