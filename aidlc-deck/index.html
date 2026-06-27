@@ -4,230 +4,278 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>AI-DLC × Kiro — Enterprise</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🔒</text></svg>"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ─── Reset ─────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box}
-
-/* ─── Root: everything in vw / vmin — truly fluid ─ */
-:root{
-  --s: 2.2vw;       /* base scale unit: grows with viewport */
-  --r: 980px;       /* pill border-radius */
-}
-
 html,body{width:100%;height:100%}
 body{
-  font-family:'Inter','Noto Sans Thai',-apple-system,BlinkMacSystemFont,sans-serif;
-  background:#000;
-  color:#f5f5f7;
-  display:grid;
-  place-items:center;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display','Inter','Noto Sans Thai',system-ui,sans-serif;
+  background:#e8e8ed;
+  color:#1d1d1f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  overflow:hidden;
 }
 
-/* ─── Cinematic BG ──────────────────────────────── */
-.bg{position:fixed;inset:0;z-index:0;pointer-events:none}
-.bg .g{position:absolute;border-radius:50%;filter:blur(min(10vw,100px));animation:drift 26s ease-in-out infinite alternate}
-.bg .g1{width:60vw;height:60vw;top:-18%;left:-12%;background:radial-gradient(circle,rgba(124,72,210,.22),transparent 64%)}
-.bg .g2{width:46vw;height:46vw;bottom:-14%;right:-8%;background:radial-gradient(circle,rgba(0,112,255,.14),transparent 64%);animation-delay:-9s;animation-duration:32s}
-.bg .g3{width:36vw;height:36vw;top:48%;left:44%;background:radial-gradient(circle,rgba(225,90,55,.06),transparent 64%);animation-delay:-15s;animation-duration:36s}
-@keyframes drift{to{transform:translate(3vw,2.5vw) scale(1.07)}}
-.bg .grain{position:absolute;inset:0;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.bg .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 40%,rgba(0,0,0,.55) 100%)}
+/* ── Animated liquid orb background ── */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg .base{position:absolute;inset:0;background:#fff}
+.bg .orb{position:absolute;border-radius:50%;filter:blur(80px)}
+.bg .orb1{
+  width:640px;height:640px;left:-10%;top:-15%;
+  background:rgba(144,70,255,.12);
+  animation:float-a 18s ease-in-out infinite;
+}
+.bg .orb2{
+  width:560px;height:560px;right:-8%;top:-12%;
+  background:rgba(255,120,180,.08);
+  animation:float-b 22s ease-in-out infinite;
+}
+.bg .orb3{
+  width:520px;height:520px;right:-6%;bottom:-10%;
+  background:rgba(37,99,235,.10);
+  animation:float-a 18s ease-in-out infinite;animation-delay:-6s;
+}
+.bg .orb4{
+  width:500px;height:500px;left:-8%;bottom:-12%;
+  background:rgba(144,70,255,.12);
+  animation:float-b 22s ease-in-out infinite;animation-delay:-10s;
+}
+@keyframes float-a{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  33%{transform:translate3d(60px,-50px,0) scale(1.08)}
+  66%{transform:translate3d(-30px,40px,0) scale(0.96)}
+}
+@keyframes float-b{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  33%{transform:translate3d(-55px,45px,0) scale(1.1)}
+  66%{transform:translate3d(40px,-30px,0) scale(0.97)}
+}
+/* Film grain overlay */
+.bg .grain{
+  position:absolute;inset:0;
+  opacity:0.02;
+  mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;
+}
 
-/* ─── Main content ──────────────────────────────── */
-.main{
+/* ── Hero section — exact iCloud card ── */
+.hero{
   position:relative;z-index:1;
+  width:min(94vw,700px);
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 0 0 0.5px rgba(0,0,0,.04),0 2px 12px rgba(0,0,0,.04);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:48px 56px 40px;
   text-align:center;
-  display:flex;flex-direction:column;align-items:center;
-  width:min(92vw, 720px);   /* headline zone: wide enough to breathe */
-}
-/* Controls zone (input + slider) narrower than headline */
-.controls{
-  width:min(92vw, 380px);
-  display:flex;flex-direction:column;align-items:stretch;
 }
 
-/* Stagger animation */
-.main>*{opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
-.main>*:nth-child(1){animation-delay:.06s}
-.main>*:nth-child(2){animation-delay:.2s}
-.main>*:nth-child(3){animation-delay:.34s}
-.main>*:nth-child(4){animation-delay:.48s}
-.main>*:nth-child(5){animation-delay:.62s}
-.main>*:nth-child(6){animation-delay:.76s}
-.main>*:nth-child(7){animation-delay:.9s}
-@keyframes rise{from{opacity:0;transform:translateY(1.5vh)}to{opacity:1;transform:none}}
+/* ── Staggered entrance — Apple-style smooth reveal ── */
+.hero>*{opacity:0;animation:rise .8s cubic-bezier(.16,1,.3,1) both}
+.hero>*:nth-child(1){animation-delay:.1s}
+.hero>*:nth-child(2){animation-delay:.3s}
+.hero>*:nth-child(3){animation-delay:.5s}
+.hero>*:nth-child(4){animation-delay:.7s}
+.hero>*:nth-child(5){animation-delay:.9s}
+@keyframes rise{from{opacity:0;transform:translateY(20px) scale(0.97)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .hero>*{animation:none!important;opacity:1!important}
+  .logo-mark{animation:none!important}
+  #kiro-eyes{animation:none!important}
+  .bg .orb{animation:none!important}
+}
 
-/* ─── Hero orb ──────────────────────────────────── */
-.orb-wrap{
+/* ── Logo with iCloud dotted ring ── */
+.logo{
+  margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;
   position:relative;
-  width:clamp(80px, 12vmin, 160px);
-  aspect-ratio:1;
-  margin-bottom:clamp(20px, 3vh, 44px);
-  display:flex;align-items:center;justify-content:center;
+  width:clamp(120px,14vw,160px);
+  height:clamp(120px,14vw,160px);
 }
-.orb{
-  position:absolute;inset:0;border-radius:50%;
-  background:
-    radial-gradient(circle at 32% 28%, rgba(255,255,255,.45), transparent 38%),
-    conic-gradient(from 210deg, #7a5cff, #2997ff, #30d3c0, #7a5cff);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.08),
-    0 min(3vw,32px) min(8vw,80px) rgba(80,60,200,.4),
-    inset 0 -6px 24px rgba(0,0,0,.4),
-    inset 0 4px 16px rgba(255,255,255,.22);
-  animation:orb-spin 14s linear infinite;
+.dot-ring{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  animation:ring-spin 24s linear infinite;
 }
-@keyframes orb-spin{to{transform:rotate(360deg)}}
-.orb-glow{
-  position:absolute;inset:-26%;border-radius:50%;
-  background:radial-gradient(circle,rgba(122,92,255,.38),transparent 60%);
-  filter:blur(min(4vw,40px));
-  animation:pulse 4s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
-.orb-lock{
+@keyframes ring-spin{to{transform:rotate(360deg)}}
+.logo-mark{
   position:relative;z-index:2;
-  width:38%;aspect-ratio:1;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(10,10,15,.55);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+  width:44%;height:44%;
+  border-radius:22%;
+  box-shadow:0 8px 24px rgba(144,70,255,.28),0 3px 6px rgba(144,70,255,.14);
+  animation:ghost-float 3.5s ease-in-out infinite;
 }
-.orb-lock svg{width:50%;height:50%;fill:#fff}
-
-/* ─── Overline ──────────────────────────────────── */
-.overline{
-  display:inline-flex;align-items:center;gap:.5em;
-  font-size:clamp(10px, 1vw, 13px);
-  font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:#a9c7ff;
-  margin-bottom:clamp(14px, 2vh, 28px);
-  padding:.5em 1.1em;border-radius:var(--r);
-  border:1px solid rgba(122,150,255,.25);
-  background:rgba(122,150,255,.06);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  white-space:nowrap;
+@keyframes ghost-float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  25%{transform:translateY(-5px) rotate(-1.5deg)}
+  50%{transform:translateY(-1px) rotate(0deg)}
+  75%{transform:translateY(-3px) rotate(1deg)}
 }
-.overline::before{content:'';width:.45em;height:.45em;border-radius:50%;background:#5e9bff;box-shadow:0 0 .6em #5e9bff}
+@keyframes ghost-float{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  25%{transform:translateY(-8px) rotate(-2deg)}
+  50%{transform:translateY(-2px) rotate(0deg)}
+  75%{transform:translateY(-5px) rotate(1.5deg)}
+}
+#kiro-eyes{
+  transform-box:fill-box;
+  transform-origin:center;
+  animation:ghost-blink 5s ease-in-out infinite;
+}
+@keyframes ghost-blink{
+  0%,92%,100%{transform:scaleY(1)}
+  95%,97%{transform:scaleY(0.12)}
+}
 
-/* ─── Headline — fluid vw ───────────────────────── */
+/* ── Eyebrow — hidden in iCloud style ── */
+.eyebrow{display:none}
+
+/* ── Headline — exact iCloud ── */
 h1{
-  font-size:clamp(24px, 3.6vw, 58px);
+  font-family:'SF Pro Display','SF Pro Text',-apple-system,BlinkMacSystemFont,'Inter','Noto Sans Thai',sans-serif;
+  font-size:34px;
   font-weight:700;
-  letter-spacing:-.03em;
-  line-height:1.07;
-  margin-bottom:clamp(10px, 1.4vh, 20px);
-  background:linear-gradient(180deg,#fff 0%,#fff 50%,#bbbbc2 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:-0.01em;
+  line-height:1.2;
+  color:#1d1d1f;
+  margin-bottom:28px;
 }
 
-/* ─── Subtitle ──────────────────────────────────── */
+/* ── Subtitle — hidden in iCloud style ── */
 .sub{
-  font-size:clamp(14px, 1.5vw, 22px);
-  font-weight:400;color:#9a9aa2;
-  line-height:1.5;letter-spacing:-.005em;
-  margin-bottom:clamp(24px, 4vh, 52px);
+  display:none;
 }
 
-/* ─── Input ─────────────────────────────────────── */
-.field{position:relative;width:100%;margin-bottom:clamp(12px, 1.5vh, 20px)}
+/* ── Controls — wide like iCloud ── */
+.controls{
+  width:min(100%,460px);
+  display:flex;flex-direction:column;gap:14px;
+}
+
+/* ── Input field — exact Apple Business signin (from live inspect) ── */
+.field{position:relative}
 .field input{
   width:100%;
-  padding:.85em 2.8em .85em 1.1em;
-  border-radius:.75em;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.04);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  color:#f5f5f7;
-  font-size:clamp(14px, 1.2vw, 18px);
-  font-family:inherit;
+  height:56px;
+  padding:18px 16px 0 15px;
+  border-radius:12px;
+  border:2px solid #d2d2d7;
+  background:rgba(255,255,255,0.8);
+  color:#494949;
+  font-size:17px;font-family:inherit;font-weight:400;
   outline:none;
-  transition:all .3s;
+  transition:border-color .2s;
 }
 .field input:focus{
-  border-color:rgba(94,155,255,.6);
-  background:rgba(94,155,255,.05);
-  box-shadow:0 0 0 4px rgba(94,155,255,.12);
+  border-color:#0071e3;
 }
-.field input::placeholder{color:rgba(255,255,255,.3)}
+.field input::placeholder{color:transparent}
+.field .flabel{
+  position:absolute;left:17px;top:50%;transform:translateY(-50%);
+  color:#6e6e73;font-size:17px;font-weight:400;font-family:inherit;
+  pointer-events:none;
+  transition:top .15s ease,font-size .15s ease,color .15s ease,transform .15s ease;
+}
+.field input:focus ~ .flabel,
+.field input:not(:placeholder-shown) ~ .flabel{
+  top:12px;transform:none;
+  font-size:12px;
+}
+.field input:focus ~ .flabel{color:#0071e3}
 .field .eye{
-  position:absolute;right:.75em;top:50%;transform:translateY(-50%);
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
   background:none;border:none;cursor:pointer;
-  color:rgba(255,255,255,.35);padding:.3em;border-radius:.5em;
-  transition:color .2s,background .2s;display:flex;
+  color:#86868b;padding:5px;border-radius:6px;
+  display:flex;transition:color .18s,background .18s;
 }
-.field .eye:hover{color:#fff;background:rgba(255,255,255,.07)}
-.field .eye svg{width:1.2em;height:1.2em}
+.field .eye:hover{color:#1d1d1f;background:rgba(0,0,0,.04)}
+.field .eye svg{width:16px;height:16px}
 
-/* ─── Slider ─────────────────────────────────────── */
+/* ── Info text — exact iCloud: 12px/400/#1d1d1f/lh16px ── */
+.info-text{
+  font-size:13px;
+  font-weight:400;
+  color:#1d1d1f;
+  line-height:18px;
+  text-align:left;
+  margin-bottom:8px;
+}
+
+/* ── Slider — iCloud "ดำเนินการต่อ" exact colors ──
+   before input: #b2cef5 (light blue, disabled-look)
+   after input:  #0071e3 (blue, like iCloud "ดำเนินการต่อ" button) */
 .slider{
   position:relative;
-  height:clamp(44px, 5.5vh, 60px);
   width:100%;
-  border-radius:var(--r);
-  background:linear-gradient(135deg,#0a84ff,#5e9bff);
+  height:50px;
+  border-radius:980px;
+  background:#b2cef5;
   overflow:hidden;
   user-select:none;-webkit-user-select:none;touch-action:none;
-  box-shadow:0 min(1.5vw,18px) min(5vw,50px) rgba(10,132,255,.3),inset 0 1px 0 rgba(255,255,255,.18);
-  transition:transform .15s,box-shadow .3s;
+  transition:background .25s,transform .15s;
 }
-.slider:hover{box-shadow:0 min(2vw,22px) min(6vw,60px) rgba(10,132,255,.42),inset 0 1px 0 rgba(255,255,255,.18)}
-.slider:active{transform:scale(.985)}
-.slider .fill{position:absolute;left:0;top:0;bottom:0;border-radius:var(--r);background:rgba(255,255,255,.07);pointer-events:none}
+.slider.active-passkey{background:#0071e3}
+.slider.active-passkey:hover{background:#0077ed}
+.slider:not(.active-passkey):hover{background:#a8c6f0}
+.slider:active{transform:scale(.98)}
+.slider .fill{
+  position:absolute;left:0;top:0;bottom:0;border-radius:980px;
+  background:rgba(255,255,255,.06);pointer-events:none;
+}
 .slider .track{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .slider .lbl{
   color:#fff;
-  font-size:clamp(13px, 1.1vw, 17px);
-  font-weight:600;letter-spacing:.01em;
+  font-size:14px;font-weight:400;
   pointer-events:none;transition:opacity .3s;
 }
 .slider .thumb{
-  position:absolute;left:.28em;top:50%;transform:translateY(-50%);
-  height:calc(100% - .56em);aspect-ratio:1;border-radius:50%;
+  position:absolute;left:4px;top:50%;transform:translateY(-50%);
+  width:42px;height:42px;border-radius:50%;
   background:#fff;
   display:flex;align-items:center;justify-content:center;
   cursor:grab;z-index:2;
-  box-shadow:0 2px 10px rgba(0,0,0,.2);
-  transition:transform .12s;
+  box-shadow:0 1px 3px rgba(0,0,0,.12);
+  transition:transform .1s;
 }
-.slider .thumb:hover{transform:translateY(-50%) scale(1.08)}
-.slider .thumb:active{cursor:grabbing;transform:translateY(-50%) scale(.94)}
-.slider .thumb svg{width:42%;height:42%;fill:none;stroke:#0a84ff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.slider.ok{background:linear-gradient(135deg,#28a745,#34c759);box-shadow:0 min(1.5vw,18px) min(5vw,50px) rgba(52,199,89,.3)}
+.slider .thumb:hover{transform:translateY(-50%) scale(1.06)}
+.slider .thumb:active{cursor:grabbing;transform:translateY(-50%) scale(.93)}
+.slider .thumb svg{
+  width:14px;height:14px;
+  fill:none;stroke:#0071e3;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;
+}
+.slider.active-passkey .thumb svg{stroke:#0071e3}
+.slider:not(.active-passkey) .thumb svg{stroke:#b2cef5}
+.slider.ok{background:#34c759}
 .slider.ok .thumb svg{stroke:#34c759}
 
-/* ─── Trust / messages ───────────────────────────── */
+/* ── Trust line ── */
 .trust{
-  display:flex;align-items:center;justify-content:center;gap:.5em;
-  margin-top:clamp(16px, 2.5vh, 32px);
-  color:rgba(255,255,255,.26);
-  font-size:clamp(11px, .9vw, 14px);
-  font-weight:500;letter-spacing:.01em;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  margin-top:12px;
+  color:#6e6e73;font-size:13px;font-weight:400;
 }
-.trust svg{width:1em;height:1em;fill:currentColor;opacity:.7}
-.err{
-  color:#ff6961;
-  font-size:clamp(12px, 1vw, 15px);
-  margin-top:1em;display:none;
-  animation:shake .35s;
-}
+.trust svg{width:14px;height:14px;fill:currentColor;opacity:.7;flex-shrink:0}
+
+/* ── Error ── */
+.err{color:#ff3b30;font-size:13px;text-align:center;display:none;animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.ld{
-  display:none;margin-top:1em;
-  color:#9a9aa2;font-size:clamp(12px, 1vw, 15px);
-}
+
+/* ── Loading ── */
+.ld{display:none;text-align:center;color:#86868b;font-size:13px}
 .ld .sp{
-  display:inline-block;width:1em;height:1em;
-  border:2px solid rgba(255,255,255,.1);border-top-color:#5e9bff;
-  border-radius:50%;animation:spin .6s linear infinite;
-  margin-right:.5em;vertical-align:-.15em;
+  display:inline-block;width:12px;height:12px;
+  border:1.5px solid rgba(0,0,0,.1);border-top-color:#0071e3;
+  border-radius:50%;animation:spin .55s linear infinite;
+  margin-right:6px;vertical-align:-.12em;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -235,41 +283,53 @@ h1{
 <body>
 
 <div class="bg">
-  <div class="g g1"></div>
-  <div class="g g2"></div>
-  <div class="g g3"></div>
+  <div class="base"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <div class="orb orb4"></div>
   <div class="grain"></div>
-  <div class="vig"></div>
 </div>
 
-<div class="main">
+<section class="hero">
 
-  <div class="orb-wrap">
-    <div class="orb-glow"></div>
-    <div class="orb"></div>
-    <div class="orb-lock">
-      <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm3 11c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
-    </div>
+  <div class="logo">
+    <!-- iCloud-style colorful dotted ring -->
+    <svg class="dot-ring" viewBox="0 0 200 200" aria-hidden="true">
+      <g id="dots"></g>
+    </svg>
+    <svg viewBox="0 0 1200 1200" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-mark" id="kiro-logo">
+      <rect width="1200" height="1200" rx="272" fill="#9046FF"/>
+      <path d="M398.554 818.914C316.315 1001.03 491.477 1046.74 620.672 940.156C658.687 1059.66 801.052 970.473 852.234 877.795C964.787 673.567 919.318 465.357 907.64 422.374C827.637 129.443 427.623 128.946 358.8 423.865C342.651 475.544 342.402 534.18 333.458 595.051C328.986 625.86 325.507 645.488 313.83 677.785C306.873 696.424 297.68 712.819 282.773 740.645C259.915 783.881 269.604 867.113 387.87 823.883L399.051 818.914H398.554Z" fill="white"/>
+      <g id="kiro-eyes">
+        <ellipse cx="636" cy="487" rx="40" ry="62" fill="#19161D"/>
+        <ellipse cx="771" cy="487" rx="40" ry="62" fill="#19161D"/>
+      </g>
+    </svg>
   </div>
 
-  <div class="overline">Enterprise Edition</div>
+  <p class="eyebrow">AI-DLC × Kiro</p>
 
-  <h1>Shaping the Future<br>of Software Development</h1>
+  <h1>AI-DLC × Kiro</h1>
 
   <p class="sub">AI-DLC for Enterprise Teams</p>
 
   <div class="controls">
     <div class="field">
-      <input type="password" id="pk" placeholder="Enter passkey" autocomplete="off" autofocus/>
-      <button class="eye" id="eye" type="button" aria-label="Toggle">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      </button>
+      <input type="text" id="pk" placeholder=" " autocomplete="off" autofocus/>
+      <span class="flabel">Passkey</span>
     </div>
+
+    <p class="info-text">ข้อมูลพาสคีย์ของคุณใช้เพื่อให้คุณลงชื่อเข้าใช้ได้อย่างปลอดภัยและเข้าถึงข้อมูลของคุณได้ เพื่อวัตถุประสงค์ด้านความปลอดภัย การสนับสนุน และการรายงาน</p>
 
     <div class="slider" id="sl">
       <div class="fill" id="fl"></div>
-      <div class="track"><span class="lbl" id="lb">Slide to Unlock</span></div>
-      <div class="thumb" id="th"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+      <div class="track">
+      <span class="lbl" id="lb">ลงชื่อเข้าด้วยพาสคีย์</span>
+    </div>
+      <div class="thumb" id="th">
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </div>
     </div>
 
     <div class="err" id="er"></div>
@@ -281,85 +341,170 @@ h1{
     </div>
   </div>
 
-</div>
+</section>
 
-<script id="__ENCRYPTED_PAYLOAD__" type="application/octet-stream">+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</script>
+<script id="__ENCRYPTED_PAYLOAD__" type="application/octet-stream">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</script>
 
 <script>
+/* ── iCloud-style dense dotted halo — runs immediately, no deps ── */
 (function(){
+  const g=document.getElementById('dots');
+  if(!g)return;
+  const cx=100,cy=100;
+  const palette=['#ff453a','#ff6b22','#ff9f0a','#ffd60a','#9be34a','#34c759','#2bd4c4','#40b3ff','#0a84ff','#5e5ce6','#bf5af2','#ff2d92'];
+  function colorAt(t){const f=t*palette.length,i=Math.floor(f)%palette.length;return palette[i];}
+  [{r:64,n:30,min:1.2,max:2.4},{r:74,n:38,min:1.6,max:3.2},{r:84,n:46,min:2.0,max:3.8},{r:94,n:52,min:1.4,max:3.0}]
+  .forEach((b,bi)=>{
+    for(let i=0;i<b.n;i++){
+      const t=i/b.n,jitter=bi%2?.5/b.n:0;
+      const a=(t+jitter)*Math.PI*2-Math.PI/2;
+      const rr=b.r+Math.random()*4-2;
+      const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;
+      const size=b.min+Math.random()*(b.max-b.min);
+      const op=0.45+0.55*Math.abs(Math.sin((t+0.25)*Math.PI));
+      const d=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      d.setAttribute('cx',x.toFixed(1));d.setAttribute('cy',y.toFixed(1));
+      d.setAttribute('r',size.toFixed(2));d.setAttribute('fill',colorAt(t));
+      d.setAttribute('opacity',op.toFixed(2));g.appendChild(d);
+    }
+  });
+})();
+
+(function(){
+  /* ── Crypto: PBKDF2 600K iterations + AES-256-GCM ── */
   async function dk(p,s){
     const e=new TextEncoder();
     const k=await crypto.subtle.importKey('raw',e.encode(p),'PBKDF2',false,['deriveKey']);
     return crypto.subtle.deriveKey({name:'PBKDF2',salt:s,iterations:600000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']);
   }
-  function b(x){const s=atob(x);const a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a;}
-  async function dec(d,p){const r=b(d);return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:r.slice(16,28)},await dk(p,r.slice(0,16)),r.slice(28)));}
-
-  // Toggle visibility
-  const inp=document.getElementById('pk'),eye=document.getElementById('eye');
-  let vis=false;
-  const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-  const EYEOFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
-  eye.addEventListener('click',()=>{vis=!vis;inp.type=vis?'text':'password';eye.innerHTML=vis?EYEOFF:EYE;});
-
-  // Slider
-  const sl=document.getElementById('sl'),th=document.getElementById('th'),fl=document.getElementById('fl');
-  const lb=document.getElementById('lb'),er=document.getElementById('er'),ld=document.getElementById('ld');
-  let drag=false,sx=0,tl=0;
-
-  function PAD(){
-    // thumb's resting inset from edge (in CSS: left:.28em on slider font-size)
-    const s=parseFloat(getComputedStyle(sl).fontSize)||16;
-    return s*0.28;
+  function b64(x){
+    const s=atob(x);
+    const a=new Uint8Array(s.length);
+    for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);
+    return a;
   }
+  async function decrypt(d,p){
+    const r=b64(d);
+    return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:r.slice(16,28)},await dk(p,r.slice(0,16)),r.slice(28)));
+  }
+
+  /* ── Element refs ── */
+  const inp=document.getElementById('pk');
+  const sl=document.getElementById('sl'),th=document.getElementById('th');
+  const fl=document.getElementById('fl'),lb=document.getElementById('lb');
+  const er=document.getElementById('er'),ld=document.getElementById('ld');
+
+  /* ── Toggle slider color based on passkey input ── */
+  function updateSliderState(){
+    if(inp.value.trim().length>0){
+      sl.classList.add('active-passkey');
+    }else{
+      sl.classList.remove('active-passkey');
+    }
+  }
+  inp.addEventListener('input',updateSliderState);
+  updateSliderState();
+
+  /* ── Kiro eyes track mouse cursor with smooth lerp ── */
+  const eyes=document.getElementById('kiro-eyes');
+  const logoEl=document.getElementById('kiro-logo');
+  if(eyes&&logoEl){
+    let cx=0,cy=0,tx=0,ty=0;
+    const MAX=22;
+    window.addEventListener('pointermove',function(e){
+      const r=logoEl.getBoundingClientRect();
+      const lx=r.left+r.width/2,ly=r.top+r.height/2;
+      const dx=e.clientX-lx,dy=e.clientY-ly;
+      const d=Math.hypot(dx,dy)||1;
+      cx=(dx/d)*MAX*Math.min(1,d/400);
+      cy=(dy/d)*MAX*Math.min(1,d/400);
+    });
+    (function loop(){
+      tx+=(cx-tx)*0.12;
+      ty+=(cy-ty)*0.12;
+      eyes.setAttribute('transform','translate('+tx.toFixed(1)+' '+ty.toFixed(1)+')');
+      requestAnimationFrame(loop);
+    })();
+  }
+
+  /* ── Slider JS with pointer events ── */
+  let drag=false,sx=0,tl=0;
+  const PAD=3;
   function TW(){return th.offsetWidth;}
-  function MX(){return sl.offsetWidth-TW()-PAD()*2;}
+  function MX(){return sl.offsetWidth-TW()-PAD*2;}
   function setPos(x){
     tl=Math.max(0,Math.min(x,MX()));
-    th.style.left=(PAD()+tl)+'px';
-    fl.style.width=(PAD()+tl+TW()/2)+'px';
-    lb.style.opacity=1-(tl/MX())*2.2;
+    th.style.left=(PAD+tl)+'px';
+    fl.style.width=(PAD+tl+TW()/2)+'px';
+    lb.style.opacity=MX()>0?Math.max(0,1-(tl/MX())*2.4):1;
   }
   function reset(){
-    const ease='left .4s cubic-bezier(.16,1,.3,1)';
-    th.style.transition=ease;fl.style.transition='width .4s cubic-bezier(.16,1,.3,1)';
+    th.style.transition='left .4s cubic-bezier(.16,1,.3,1)';
+    fl.style.transition='width .4s cubic-bezier(.16,1,.3,1)';
     setPos(0);
-    setTimeout(()=>{th.style.transition='';fl.style.transition='';},400);
+    setTimeout(function(){th.style.transition='';fl.style.transition='';},420);
     sl.classList.remove('ok');
   }
-
-  th.addEventListener('pointerdown',e=>{
+  th.addEventListener('pointerdown',function(e){
     if(ld.style.display==='block')return;
-    drag=true;sx=e.clientX-tl;th.setPointerCapture(e.pointerId);e.preventDefault();
+    drag=true;sx=e.clientX-tl;
+    th.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
-  document.addEventListener('pointermove',e=>{if(!drag)return;setPos(e.clientX-sx);});
-  document.addEventListener('pointerup',async()=>{
-    if(!drag)return;drag=false;
-    if(MX()>0&&tl/MX()>.85){sl.classList.add('ok');await go();}
-    else reset();
+  document.addEventListener('pointermove',function(e){
+    if(!drag)return;
+    setPos(e.clientX-sx);
+  });
+  document.addEventListener('pointerup',async function(){
+    if(!drag)return;
+    drag=false;
+    if(MX()>0&&tl/MX()>.85){
+      sl.classList.add('ok');
+      await go();
+    }else{
+      reset();
+    }
   });
 
+  /* ── Decrypt & unlock ── */
   async function go(){
     const p=inp.value.trim();
-    if(!p){er.textContent='กรุณากรอก Passkey';er.style.display='block';reset();return;}
-    er.style.display='none';ld.style.display='block';
+    if(!p){
+      er.textContent='กรุณากรอก Passkey';
+      er.style.display='block';
+      reset();
+      return;
+    }
+    er.style.display='none';
+    ld.style.display='block';
     try{
-      const h=await dec(document.getElementById('__ENCRYPTED_PAYLOAD__').textContent,p);
-      document.open();document.write(h);document.close();
-    }catch{
+      const payload=document.getElementById('__ENCRYPTED_PAYLOAD__').textContent;
+      const h=await decrypt(payload,p);
+      document.open();
+      document.write(h);
+      document.close();
+    }catch(e){
       ld.style.display='none';
-      er.textContent='Passkey ไม่ถูกต้อง';er.style.display='block';
-      inp.select();reset();
+      er.textContent='Passkey ไม่ถูกต้อง';
+      er.style.display='block';
+      inp.select();
+      reset();
     }
   }
 
-  inp.addEventListener('keydown',e=>{
+  /* ── Enter key animates slider then unlocks ── */
+  inp.addEventListener('keydown',function(e){
     if(e.key!=='Enter')return;
     e.preventDefault();
     th.style.transition='left .5s cubic-bezier(.16,1,.3,1)';
     fl.style.transition='width .5s cubic-bezier(.16,1,.3,1)';
-    setPos(MX());sl.classList.add('ok');
-    setTimeout(()=>{th.style.transition='';fl.style.transition='';go();},500);
+    setPos(MX());
+    sl.classList.add('ok');
+    setTimeout(function(){
+      th.style.transition='';
+      fl.style.transition='';
+      go();
+    },520);
   });
 })();
 </script>
