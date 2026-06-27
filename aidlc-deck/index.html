@@ -7,114 +7,136 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>🔒</text></svg>"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+:root{
+  --accent:#9046ff;
+  --accent-glow:rgba(144,70,255,0.25);
+  --surface:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.08);
+  --text:#f5f5f7;
+  --muted:#86868b;
+}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 body{
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',sans-serif;
-  background:#e8e8ed;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  background:#000;
+  color:var(--text);
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  min-height:100vh;padding:1rem;
+  min-height:100vh;padding:1.5rem;
+  overflow:hidden;
 }
 
-/* Top nav bar */
-.topbar{
-  position:fixed;top:0;left:0;right:0;height:48px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-  background:rgba(255,255,255,0.8);
-  backdrop-filter:saturate(180%) blur(20px);
-  -webkit-backdrop-filter:saturate(180%) blur(20px);
-  border-bottom:0.5px solid rgba(0,0,0,0.1);
-  z-index:100;
+/* Ambient background */
+.bg-glow{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
 }
-.topbar-brand{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:600;color:#1d1d1f}
-.topbar-brand svg{width:18px;height:18px;border-radius:4px}
-
-/* Main card */
-.card{
-  background:#fff;
-  border-radius:16px;
-  box-shadow:0 4px 40px rgba(0,0,0,0.08);
-  padding:48px 44px 36px;
-  max-width:460px;width:100%;
-  text-align:center;
+.bg-glow::before{
+  content:'';position:absolute;
+  width:600px;height:600px;
+  top:-10%;left:-10%;
+  background:radial-gradient(circle,rgba(144,70,255,0.12) 0%,transparent 70%);
+  animation:float-a 12s ease-in-out infinite;
 }
+.bg-glow::after{
+  content:'';position:absolute;
+  width:500px;height:500px;
+  bottom:-10%;right:-10%;
+  background:radial-gradient(circle,rgba(0,113,227,0.08) 0%,transparent 70%);
+  animation:float-b 15s ease-in-out infinite;
+}
+@keyframes float-a{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,20px)}}
+@keyframes float-b{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,-30px)}}
 
-/* Logo with dot ring */
-.logo-wrap{
-  width:140px;height:140px;
-  margin:0 auto 24px;
-  position:relative;
+/* Content */
+.content{position:relative;z-index:1;text-align:center;max-width:400px;width:100%}
+
+/* Icon area */
+.icon-area{
+  margin-bottom:2rem;
   display:flex;align-items:center;justify-content:center;
 }
-.dot-ring{position:absolute;inset:0;animation:spin-slow 25s linear infinite}
-@keyframes spin-slow{to{transform:rotate(360deg)}}
-.kiro-icon{width:56px;height:56px;border-radius:13px;position:relative;z-index:2}
+.icon-circle{
+  width:88px;height:88px;
+  border-radius:50%;
+  background:var(--surface);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 40px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,0.06);
+  animation:pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 40px var(--accent-glow),inset 0 1px 0 rgba(255,255,255,0.06)}50%{box-shadow:0 0 60px rgba(144,70,255,0.35),inset 0 1px 0 rgba(255,255,255,0.06)}}
+/* MUI Lock icon */
+.lock-icon{width:36px;height:36px;fill:var(--accent)}
 
-/* Heading */
-.title{
-  font-size:26px;font-weight:700;color:#1d1d1f;
-  letter-spacing:-0.02em;
-  margin-bottom:28px;
+/* Typography — Apple product page style */
+h1{
+  font-size:clamp(2rem,5vw,2.8rem);
+  font-weight:800;
+  letter-spacing:-0.03em;
+  line-height:1.1;
+  margin-bottom:0.75rem;
+  background:linear-gradient(135deg,#f5f5f7 30%,#a1a1a6);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.subtitle{
+  font-size:1rem;
+  color:var(--muted);
+  line-height:1.5;
+  margin-bottom:2.5rem;
+  font-weight:400;
 }
 
-/* Input — Apple style */
+/* Input */
 .field{
   position:relative;
-  margin-bottom:10px;
+  margin-bottom:2rem;
 }
 .field input{
   width:100%;
-  padding:15px 44px 15px 16px;
-  border:1px solid #d2d2d7;
-  border-radius:10px;
-  font-size:16px;
+  padding:16px 48px 16px 20px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--text);
+  font-size:1rem;
   font-family:inherit;
-  color:#1d1d1f;
-  background:#fff;
   outline:none;
-  transition:border-color 0.2s,box-shadow 0.2s;
+  transition:border-color 0.3s,box-shadow 0.3s;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
 .field input:focus{
-  border-color:#0071e3;
-  box-shadow:0 0 0 4px rgba(0,113,227,0.12);
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-glow);
 }
-.field input::placeholder{color:#86868b}
+.field input::placeholder{color:rgba(255,255,255,0.3)}
 .field .eye{
-  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
   background:none;border:none;cursor:pointer;
-  font-size:16px;color:#86868b;padding:4px;border-radius:4px;
-}
-.field .eye:hover{background:rgba(0,0,0,0.04)}
-
-/* Info text */
-.info{
-  text-align:left;
-  margin:20px 0 24px;
-  padding:0 2px;
-}
-.info-icon{font-size:28px;margin-bottom:6px;display:block}
-.info p{
-  font-size:11.5px;line-height:1.55;color:#6e6e73;
+  color:var(--muted);font-size:18px;padding:4px;
 }
 
-/* Slider — "Continue" replacement */
+/* Slider */
 .slider-wrap{
-  position:relative;height:48px;
-  border-radius:24px;
-  background:linear-gradient(135deg,#0071e3 0%,#0077ed 100%);
+  position:relative;height:56px;
+  border-radius:28px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--border);
   overflow:hidden;
   user-select:none;-webkit-user-select:none;
   touch-action:none;
-  margin-bottom:10px;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
 }
 .slider-fill{
   position:absolute;left:0;top:0;bottom:0;
-  border-radius:24px;
-  background:rgba(255,255,255,0.1);
+  border-radius:28px;
+  background:linear-gradient(90deg,rgba(144,70,255,0.15),rgba(144,70,255,0.25));
   pointer-events:none;
 }
 .slider-track{
@@ -122,38 +144,41 @@ body{
   display:flex;align-items:center;justify-content:center;
 }
 .slider-label{
-  color:rgba(255,255,255,0.9);
-  font-size:15px;font-weight:600;
+  color:rgba(255,255,255,0.4);
+  font-size:0.85rem;font-weight:500;
+  letter-spacing:0.03em;
   pointer-events:none;
   transition:opacity 0.3s;
 }
 .slider-thumb{
-  position:absolute;left:3px;top:3px;
-  width:42px;height:42px;border-radius:50%;
-  background:#fff;
+  position:absolute;left:4px;top:4px;
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),#b06cff);
   display:flex;align-items:center;justify-content:center;
   cursor:grab;
-  box-shadow:0 1px 3px rgba(0,0,0,0.12);
+  box-shadow:0 2px 12px var(--accent-glow);
+  transition:box-shadow 0.2s;
   z-index:2;
 }
-.slider-thumb:active{cursor:grabbing;box-shadow:0 2px 8px rgba(0,0,0,0.18)}
-.slider-thumb svg{width:16px;height:16px}
-.slider-wrap.success{background:linear-gradient(135deg,#34c759,#30d158)}
+.slider-thumb:active{cursor:grabbing;box-shadow:0 4px 20px rgba(144,70,255,0.5)}
+.slider-thumb svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.slider-wrap.success .slider-thumb{background:linear-gradient(135deg,#34c759,#30d158)}
+.slider-wrap.success{border-color:rgba(52,199,89,0.3)}
 
-/* Error & loading */
+/* Messages */
 .msg-error{
-  color:#ff3b30;font-size:13px;text-align:center;
-  margin-top:8px;display:none;
+  color:#ff453a;font-size:0.82rem;text-align:center;
+  margin-top:1rem;display:none;
   animation:shake 0.35s;
 }
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .msg-loading{
   display:none;text-align:center;
-  margin-top:8px;color:#6e6e73;font-size:13px;
+  margin-top:1rem;color:var(--muted);font-size:0.82rem;
 }
 .msg-loading .spin{
-  display:inline-block;width:12px;height:12px;
-  border:2px solid #d2d2d7;border-top-color:#0071e3;
+  display:inline-block;width:14px;height:14px;
+  border:2px solid rgba(255,255,255,0.1);border-top-color:var(--accent);
   border-radius:50%;animation:sp 0.6s linear infinite;
   margin-right:6px;vertical-align:middle;
 }
@@ -162,99 +187,51 @@ body{
 /* Footer */
 .footer{
   position:fixed;bottom:0;left:0;right:0;
-  padding:12px 20px;
-  display:flex;align-items:center;justify-content:center;gap:16px;
-  font-size:11px;color:#6e6e73;
-  background:rgba(255,255,255,0.6);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  border-top:0.5px solid rgba(0,0,0,0.06);
+  padding:14px 20px;text-align:center;
+  font-size:0.68rem;color:rgba(255,255,255,0.25);
+  letter-spacing:0.02em;
 }
-.footer a{color:#0071e3;text-decoration:none}
-.footer a:hover{text-decoration:underline}
 
-@media(max-width:520px){
-  .card{padding:36px 24px 28px;border-radius:14px}
-  .title{font-size:22px}
-  .logo-wrap{width:110px;height:110px}
-  .kiro-icon{width:44px;height:44px}
+@media(max-width:480px){
+  .icon-circle{width:72px;height:72px}
+  .lock-icon{width:28px;height:28px}
+  h1{font-size:1.8rem}
 }
 </style>
 </head>
 <body>
 
-<!-- Top bar -->
-<div class="topbar">
-  <div class="topbar-brand">
-    <svg viewBox="0 0 1200 1200" fill="none"><rect width="1200" height="1200" rx="260" fill="#9046FF"/><mask id="m1" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="272" y="202" width="655" height="796"><path d="M926.578 202.793H272.637V997.857H926.578V202.793Z" fill="white"/></mask><g mask="url(#m1)"><path d="M398.554 818.914C316.315 1001.03 491.477 1046.74 620.672 940.156C658.687 1059.66 801.052 970.473 852.234 877.795C964.787 673.567 919.318 465.357 907.64 422.374C827.637 129.443 427.623 128.946 358.8 423.865C342.651 475.544 342.402 534.18 333.458 595.051C328.986 625.86 325.507 645.488 313.83 677.785C306.873 696.424 297.68 712.819 282.773 740.645C259.915 783.881 269.604 867.113 387.87 823.883L399.051 818.914H398.554Z" fill="white"/><path d="M636.123 549.353C603.328 549.353 598.359 510.097 598.359 486.742C598.359 465.623 602.086 448.977 609.293 438.293C615.504 428.852 624.697 424.131 636.123 424.131C647.555 424.131 657.492 428.852 664.447 438.541C672.398 449.474 676.623 466.12 676.623 486.742C676.623 525.998 661.471 549.353 636.375 549.353H636.123Z" fill="#9046FF"/><path d="M771.24 549.353C738.445 549.353 733.477 510.097 733.477 486.742C733.477 465.623 737.203 448.977 744.41 438.293C750.621 428.852 759.814 424.131 771.24 424.131C782.672 424.131 792.609 428.852 799.564 438.541C807.516 449.474 811.74 466.12 811.74 486.742C811.74 525.998 796.588 549.353 771.492 549.353H771.24Z" fill="#9046FF"/></g></svg>
-    Kiro
-  </div>
-  <div></div>
-</div>
+<div class="bg-glow"></div>
 
-<!-- Card -->
-<div class="card">
-  <!-- Logo with animated dot ring -->
-  <div class="logo-wrap">
-    <svg class="dot-ring" viewBox="0 0 140 140" fill="none">
-      <circle cx="70" cy="7" r="4" fill="#ff3b30" opacity="0.9"/>
-      <circle cx="87" cy="10" r="3.5" fill="#ff6723" opacity="0.85"/>
-      <circle cx="101" cy="17" r="4" fill="#ff9500" opacity="0.9"/>
-      <circle cx="113" cy="28" r="3.5" fill="#ffb340" opacity="0.85"/>
-      <circle cx="121" cy="42" r="4" fill="#ffcc00" opacity="0.9"/>
-      <circle cx="126" cy="57" r="3.5" fill="#b4d435" opacity="0.8"/>
-      <circle cx="127" cy="73" r="4" fill="#63da38" opacity="0.85"/>
-      <circle cx="124" cy="88" r="3.5" fill="#34c759" opacity="0.9"/>
-      <circle cx="117" cy="102" r="4" fill="#30b0c7" opacity="0.85"/>
-      <circle cx="106" cy="113" r="3.5" fill="#007aff" opacity="0.9"/>
-      <circle cx="93" cy="121" r="4" fill="#5856d6" opacity="0.9"/>
-      <circle cx="78" cy="126" r="3.5" fill="#8944db" opacity="0.85"/>
-      <circle cx="62" cy="126" r="4" fill="#af52de" opacity="0.9"/>
-      <circle cx="47" cy="121" r="3.5" fill="#d44ed1" opacity="0.8"/>
-      <circle cx="34" cy="113" r="4" fill="#ff2d55" opacity="0.85"/>
-      <circle cx="23" cy="102" r="3.5" fill="#ff375f" opacity="0.75"/>
-      <circle cx="16" cy="88" r="3.5" fill="#ff6b81" opacity="0.55"/>
-      <circle cx="13" cy="73" r="3" fill="#c8a2d4" opacity="0.4"/>
-      <circle cx="14" cy="57" r="3" fill="#b8c4e0" opacity="0.3"/>
-      <circle cx="19" cy="42" r="2.5" fill="#d2d2d7" opacity="0.25"/>
-      <circle cx="28" cy="28" r="2.5" fill="#e8e8ed" opacity="0.2"/>
-      <circle cx="40" cy="17" r="2.5" fill="#e8e8ed" opacity="0.18"/>
-      <circle cx="53" cy="10" r="2.5" fill="#e8e8ed" opacity="0.15"/>
-    </svg>
-    <svg class="kiro-icon" viewBox="0 0 1200 1200" fill="none">
-      <rect width="1200" height="1200" rx="260" fill="#9046FF"/>
-      <mask id="m2" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="272" y="202" width="655" height="796"><path d="M926.578 202.793H272.637V997.857H926.578V202.793Z" fill="white"/></mask>
-      <g mask="url(#m2)">
-        <path d="M398.554 818.914C316.315 1001.03 491.477 1046.74 620.672 940.156C658.687 1059.66 801.052 970.473 852.234 877.795C964.787 673.567 919.318 465.357 907.64 422.374C827.637 129.443 427.623 128.946 358.8 423.865C342.651 475.544 342.402 534.18 333.458 595.051C328.986 625.86 325.507 645.488 313.83 677.785C306.873 696.424 297.68 712.819 282.773 740.645C259.915 783.881 269.604 867.113 387.87 823.883L399.051 818.914H398.554Z" fill="white"/>
-        <path d="M636.123 549.353C603.328 549.353 598.359 510.097 598.359 486.742C598.359 465.623 602.086 448.977 609.293 438.293C615.504 428.852 624.697 424.131 636.123 424.131C647.555 424.131 657.492 428.852 664.447 438.541C672.398 449.474 676.623 466.12 676.623 486.742C676.623 525.998 661.471 549.353 636.375 549.353H636.123Z" fill="#9046FF"/>
-        <path d="M771.24 549.353C738.445 549.353 733.477 510.097 733.477 486.742C733.477 465.623 737.203 448.977 744.41 438.293C750.621 428.852 759.814 424.131 771.24 424.131C782.672 424.131 792.609 428.852 799.564 438.541C807.516 449.474 811.74 466.12 811.74 486.742C811.74 525.998 796.588 549.353 771.492 549.353H771.24Z" fill="#9046FF"/>
-      </g>
-    </svg>
+<div class="content">
+  <!-- Lock icon -->
+  <div class="icon-area">
+    <div class="icon-circle">
+      <!-- MUI Lock Outlined icon path -->
+      <svg class="lock-icon" viewBox="0 0 24 24">
+        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+      </svg>
+    </div>
   </div>
 
   <!-- Title -->
-  <h1 class="title">Sign in with Passkey</h1>
+  <h1>Protected Content</h1>
+  <p class="subtitle">กรอก Passkey เพื่อปลดล็อกเนื้อหา</p>
 
   <!-- Input -->
   <div class="field">
-    <input type="password" id="passkey-input" placeholder="Passkey" autocomplete="off" autofocus/>
+    <input type="password" id="passkey-input" placeholder="Enter passkey" autocomplete="off" autofocus/>
     <button class="eye" id="toggle-vis" type="button" aria-label="Toggle visibility">👁</button>
   </div>
 
-  <!-- Info paragraph (like Apple's privacy paragraph) -->
-  <div class="info">
-    <span class="info-icon">🔐</span>
-    <p>เนื้อหานี้ถูกเข้ารหัสด้วย AES-256-GCM สำหรับผู้มีสิทธิ์เท่านั้น กรุณากรอก Passkey แล้วเลื่อนปุ่มเพื่อปลดล็อก การถอดรหัสทำบนเครื่องของคุณเท่านั้น ไม่มีข้อมูลถูกส่งไปยังเซิร์ฟเวอร์</p>
-  </div>
-
-  <!-- Slide to unlock (replaces Continue button) -->
+  <!-- Slide to unlock -->
   <div class="slider-wrap" id="slider-wrap">
     <div class="slider-fill" id="slider-fill"></div>
     <div class="slider-track">
       <span class="slider-label" id="slider-label">Slide to Unlock</span>
     </div>
     <div class="slider-thumb" id="slider-thumb">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="#0071e3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
     </div>
   </div>
 
@@ -262,18 +239,12 @@ body{
   <div class="msg-loading" id="loading-msg"><span class="spin"></span>Decrypting...</div>
 </div>
 
-<!-- Footer -->
-<div class="footer">
-  <span>AES-256-GCM · PBKDF2 600K</span>
-  <span>·</span>
-  <span>AI-DLC × Kiro</span>
-</div>
+<div class="footer">AES-256-GCM · PBKDF2 600K · AI-DLC × Kiro</div>
 
-<script id="__ENCRYPTED_PAYLOAD__" type="application/octet-stream">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</script>
+<script id="__ENCRYPTED_PAYLOAD__" type="application/octet-stream">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</script>
 
 <script>
 (function(){
-  // === Crypto ===
   async function deriveKey(passkey,salt){
     const enc=new TextEncoder();
     const km=await crypto.subtle.importKey('raw',enc.encode(passkey),'PBKDF2',false,['deriveKey']);
@@ -291,7 +262,6 @@ body{
     return new TextDecoder().decode(plain);
   }
 
-  // === Toggle visibility ===
   const input=document.getElementById('passkey-input');
   const toggleBtn=document.getElementById('toggle-vis');
   toggleBtn.addEventListener('click',()=>{
@@ -300,7 +270,6 @@ body{
     toggleBtn.textContent=isPass?'🙈':'👁';
   });
 
-  // === Swipe slider ===
   const wrap=document.getElementById('slider-wrap');
   const thumb=document.getElementById('slider-thumb');
   const fill=document.getElementById('slider-fill');
@@ -308,15 +277,15 @@ body{
   const errEl=document.getElementById('error-msg');
   const loadEl=document.getElementById('loading-msg');
 
-  const THUMB_W=42,PAD=3;
-  let dragging=false,startX=0,thumbLeft=PAD;
+  const TW=48,PAD=4;
+  let dragging=false,startX=0,tl=PAD;
 
-  function getMax(){return wrap.offsetWidth-THUMB_W-PAD*2;}
+  function mx(){return wrap.offsetWidth-TW-PAD*2;}
   function setPos(x){
-    thumbLeft=Math.max(PAD,Math.min(x,getMax()+PAD));
-    thumb.style.left=thumbLeft+'px';
-    fill.style.width=(thumbLeft+THUMB_W/2)+'px';
-    label.style.opacity=1-((thumbLeft-PAD)/getMax())*2;
+    tl=Math.max(PAD,Math.min(x,mx()+PAD));
+    thumb.style.left=tl+'px';
+    fill.style.width=(tl+TW/2)+'px';
+    label.style.opacity=1-((tl-PAD)/mx())*2;
   }
   function reset(){
     thumb.style.transition='left 0.4s cubic-bezier(0.32,0.72,0,1)';
@@ -328,24 +297,23 @@ body{
 
   thumb.addEventListener('pointerdown',(e)=>{
     if(loadEl.style.display==='block')return;
-    dragging=true;startX=e.clientX-thumbLeft;
-    thumb.setPointerCapture(e.pointerId);
-    e.preventDefault();
+    dragging=true;startX=e.clientX-tl;
+    thumb.setPointerCapture(e.pointerId);e.preventDefault();
   });
   document.addEventListener('pointermove',(e)=>{if(!dragging)return;setPos(e.clientX-startX);});
   document.addEventListener('pointerup',async()=>{
     if(!dragging)return;dragging=false;
-    if((thumbLeft-PAD)/getMax()>0.85){wrap.classList.add('success');await doUnlock();}
+    if((tl-PAD)/mx()>0.85){wrap.classList.add('success');await doUnlock();}
     else reset();
   });
 
   async function doUnlock(){
-    const passkey=input.value.trim();
-    if(!passkey){errEl.textContent='กรุณากรอก Passkey ก่อน';errEl.style.display='block';reset();return;}
+    const pk=input.value.trim();
+    if(!pk){errEl.textContent='กรุณากรอก Passkey ก่อน';errEl.style.display='block';reset();return;}
     errEl.style.display='none';loadEl.style.display='block';
     try{
       const payload=document.getElementById('__ENCRYPTED_PAYLOAD__').textContent;
-      const html=await decrypt(payload,passkey);
+      const html=await decrypt(payload,pk);
       document.open();document.write(html);document.close();
     }catch{
       loadEl.style.display='none';
@@ -355,13 +323,12 @@ body{
     }
   }
 
-  // Enter → animate slider + unlock
   input.addEventListener('keydown',(e)=>{
     if(e.key==='Enter'){
       e.preventDefault();
       thumb.style.transition='left 0.5s cubic-bezier(0.32,0.72,0,1)';
       fill.style.transition='width 0.5s cubic-bezier(0.32,0.72,0,1)';
-      setPos(getMax()+PAD);wrap.classList.add('success');
+      setPos(mx()+PAD);wrap.classList.add('success');
       setTimeout(()=>{thumb.style.transition='';fill.style.transition='';doUnlock();},500);
     }
   });
