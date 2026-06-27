@@ -9,191 +9,241 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+/* ─── Reset ─────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
+
+/* ─── Root: everything in vw / vmin — truly fluid ─ */
 :root{
-  /* Fluid scale unit — everything derives from this so the whole layout
-     scales smoothly with the viewport, like Apple product pages */
-  --u:clamp(14px,1.6vw,20px);
+  --s: 2.2vw;       /* base scale unit: grows with viewport */
+  --r: 980px;       /* pill border-radius */
 }
+
+html,body{width:100%;height:100%}
 body{
   font-family:'Inter','Noto Sans Thai',-apple-system,BlinkMacSystemFont,sans-serif;
-  background:#000;color:#f5f5f7;
-  display:flex;align-items:center;justify-content:center;
-  min-height:100svh;
-  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-  overflow:hidden;
+  background:#000;
+  color:#f5f5f7;
+  display:grid;
+  place-items:center;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-/* === Cinematic background === */
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden}
-.bg .glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.55;animation:drift 26s ease-in-out infinite alternate}
-.bg .g1{width:60vw;height:60vw;top:-22%;left:-14%;background:radial-gradient(circle,rgba(124,72,210,0.24),transparent 64%)}
-.bg .g2{width:48vw;height:48vw;bottom:-18%;right:-10%;background:radial-gradient(circle,rgba(0,112,255,0.16),transparent 64%);animation-delay:-9s;animation-duration:32s}
-.bg .g3{width:38vw;height:38vw;top:50%;left:46%;background:radial-gradient(circle,rgba(225,95,60,0.07),transparent 64%);animation-delay:-15s;animation-duration:36s}
-@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(4vw,3vw) scale(1.08)}}
-.bg .grain{position:absolute;inset:0;opacity:0.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.bg .vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 42%,rgba(0,0,0,0.6) 100%)}
+/* ─── Cinematic BG ──────────────────────────────── */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.bg .g{position:absolute;border-radius:50%;filter:blur(min(10vw,100px));animation:drift 26s ease-in-out infinite alternate}
+.bg .g1{width:60vw;height:60vw;top:-18%;left:-12%;background:radial-gradient(circle,rgba(124,72,210,.22),transparent 64%)}
+.bg .g2{width:46vw;height:46vw;bottom:-14%;right:-8%;background:radial-gradient(circle,rgba(0,112,255,.14),transparent 64%);animation-delay:-9s;animation-duration:32s}
+.bg .g3{width:36vw;height:36vw;top:48%;left:44%;background:radial-gradient(circle,rgba(225,90,55,.06),transparent 64%);animation-delay:-15s;animation-duration:36s}
+@keyframes drift{to{transform:translate(3vw,2.5vw) scale(1.07)}}
+.bg .grain{position:absolute;inset:0;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.bg .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 40%,rgba(0,0,0,.55) 100%)}
 
-/* === Layout — all sizing relative to --u, scales with viewport === */
+/* ─── Main content ──────────────────────────────── */
 .main{
   position:relative;z-index:1;
-  width:min(92vw,34rem);
   text-align:center;
   display:flex;flex-direction:column;align-items:center;
+  width:min(92vw, 720px);   /* headline zone: wide enough to breathe */
 }
-.main>*{opacity:0;animation:rise 1s cubic-bezier(.16,1,.3,1) forwards}
-.main>*:nth-child(1){animation-delay:.05s}
-.main>*:nth-child(2){animation-delay:.28s}
-.main>*:nth-child(3){animation-delay:.42s}
-.main>*:nth-child(4){animation-delay:.54s}
-.main>*:nth-child(5){animation-delay:.66s}
-.main>*:nth-child(6){animation-delay:.78s}
-.main>*:nth-child(7){animation-delay:.9s}
-@keyframes rise{from{opacity:0;transform:translateY(1.2vh)}to{opacity:1;transform:none}}
+/* Controls zone (input + slider) narrower than headline */
+.controls{
+  width:min(92vw, 380px);
+  display:flex;flex-direction:column;align-items:stretch;
+}
 
-/* === Hero orb — scales with viewport === */
+/* Stagger animation */
+.main>*{opacity:0;animation:rise .9s cubic-bezier(.16,1,.3,1) forwards}
+.main>*:nth-child(1){animation-delay:.06s}
+.main>*:nth-child(2){animation-delay:.2s}
+.main>*:nth-child(3){animation-delay:.34s}
+.main>*:nth-child(4){animation-delay:.48s}
+.main>*:nth-child(5){animation-delay:.62s}
+.main>*:nth-child(6){animation-delay:.76s}
+.main>*:nth-child(7){animation-delay:.9s}
+@keyframes rise{from{opacity:0;transform:translateY(1.5vh)}to{opacity:1;transform:none}}
+
+/* ─── Hero orb ──────────────────────────────────── */
 .orb-wrap{
   position:relative;
-  width:clamp(96px,13vmin,150px);
+  width:clamp(80px, 12vmin, 160px);
   aspect-ratio:1;
-  margin-bottom:calc(var(--u)*1.8);
+  margin-bottom:clamp(20px, 3vh, 44px);
   display:flex;align-items:center;justify-content:center;
 }
 .orb{
   position:absolute;inset:0;border-radius:50%;
   background:
-    radial-gradient(circle at 32% 28%,rgba(255,255,255,0.45),transparent 38%),
-    conic-gradient(from 210deg,#7a5cff,#2997ff,#30d3c0,#7a5cff);
+    radial-gradient(circle at 32% 28%, rgba(255,255,255,.45), transparent 38%),
+    conic-gradient(from 210deg, #7a5cff, #2997ff, #30d3c0, #7a5cff);
   box-shadow:
-    0 0 0 1px rgba(255,255,255,0.08),
-    0 2vmin 6vmin rgba(80,60,200,0.4),
-    inset 0 -1vmin 3vmin rgba(0,0,0,0.4),
-    inset 0 0.6vmin 2vmin rgba(255,255,255,0.22);
+    0 0 0 1px rgba(255,255,255,.08),
+    0 min(3vw,32px) min(8vw,80px) rgba(80,60,200,.4),
+    inset 0 -6px 24px rgba(0,0,0,.4),
+    inset 0 4px 16px rgba(255,255,255,.22);
   animation:orb-spin 14s linear infinite;
 }
 @keyframes orb-spin{to{transform:rotate(360deg)}}
-.orb-glow{position:absolute;inset:-26%;border-radius:50%;background:radial-gradient(circle,rgba(122,92,255,0.38),transparent 60%);filter:blur(3vmin);animation:pulse 4s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+.orb-glow{
+  position:absolute;inset:-26%;border-radius:50%;
+  background:radial-gradient(circle,rgba(122,92,255,.38),transparent 60%);
+  filter:blur(min(4vw,40px));
+  animation:pulse 4s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
 .orb-lock{
   position:relative;z-index:2;
-  width:38%;aspect-ratio:1;
+  width:38%;aspect-ratio:1;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  border-radius:50%;
-  background:rgba(10,10,15,0.55);
+  background:rgba(10,10,15,.55);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,0.15);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
 }
 .orb-lock svg{width:50%;height:50%;fill:#fff}
 
-/* === Overline === */
+/* ─── Overline ──────────────────────────────────── */
 .overline{
-  display:inline-flex;align-items:center;gap:0.5em;
-  font-size:calc(var(--u)*0.62);font-weight:600;
-  letter-spacing:0.08em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:.5em;
+  font-size:clamp(10px, 1vw, 13px);
+  font-weight:600;letter-spacing:.08em;text-transform:uppercase;
   color:#a9c7ff;
-  margin-bottom:calc(var(--u)*1.1);
-  padding:0.5em 1em;border-radius:980px;
-  border:1px solid rgba(122,150,255,0.25);
-  background:rgba(122,150,255,0.06);
+  margin-bottom:clamp(14px, 2vh, 28px);
+  padding:.5em 1.1em;border-radius:var(--r);
+  border:1px solid rgba(122,150,255,.25);
+  background:rgba(122,150,255,.06);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  white-space:nowrap;
 }
-.overline::before{content:'';width:0.4em;height:0.4em;border-radius:50%;background:#5e9bff;box-shadow:0 0 0.5em #5e9bff}
+.overline::before{content:'';width:.45em;height:.45em;border-radius:50%;background:#5e9bff;box-shadow:0 0 .6em #5e9bff}
 
-/* === Headline — fluid display type === */
+/* ─── Headline — fluid vw ───────────────────────── */
 h1{
-  font-size:calc(var(--u)*2.15);
-  font-weight:700;letter-spacing:-0.03em;line-height:1.07;
-  margin-bottom:calc(var(--u)*0.7);
-  max-width:14ch;
-  background:linear-gradient(180deg,#fff 0%,#fff 52%,#bcbcc4 100%);
+  font-size:clamp(24px, 3.6vw, 58px);
+  font-weight:700;
+  letter-spacing:-.03em;
+  line-height:1.07;
+  margin-bottom:clamp(10px, 1.4vh, 20px);
+  background:linear-gradient(180deg,#fff 0%,#fff 50%,#bbbbc2 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 
-/* === Subtitle === */
+/* ─── Subtitle ──────────────────────────────────── */
 .sub{
-  font-size:calc(var(--u)*1.0);font-weight:400;
-  color:#9a9aa2;line-height:1.5;letter-spacing:-0.005em;
-  margin-bottom:calc(var(--u)*1.9);
-  max-width:32ch;
+  font-size:clamp(14px, 1.5vw, 22px);
+  font-weight:400;color:#9a9aa2;
+  line-height:1.5;letter-spacing:-.005em;
+  margin-bottom:clamp(24px, 4vh, 52px);
 }
 
-/* === Input === */
-.field{position:relative;width:100%;max-width:24rem;margin-bottom:calc(var(--u)*0.8)}
+/* ─── Input ─────────────────────────────────────── */
+.field{position:relative;width:100%;margin-bottom:clamp(12px, 1.5vh, 20px)}
 .field input{
   width:100%;
-  padding:0.85em 2.6em 0.85em 1.1em;
-  border-radius:0.8em;
-  border:1px solid rgba(255,255,255,0.1);
-  background:rgba(255,255,255,0.04);
+  padding:.85em 2.8em .85em 1.1em;
+  border-radius:.75em;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  color:#f5f5f7;font-size:calc(var(--u)*0.92);font-family:inherit;
-  outline:none;transition:all .3s;
+  color:#f5f5f7;
+  font-size:clamp(14px, 1.2vw, 18px);
+  font-family:inherit;
+  outline:none;
+  transition:all .3s;
 }
-.field input:focus{border-color:rgba(94,155,255,0.6);background:rgba(94,155,255,0.05);box-shadow:0 0 0 4px rgba(94,155,255,0.12)}
-.field input::placeholder{color:rgba(255,255,255,0.32)}
+.field input:focus{
+  border-color:rgba(94,155,255,.6);
+  background:rgba(94,155,255,.05);
+  box-shadow:0 0 0 4px rgba(94,155,255,.12);
+}
+.field input::placeholder{color:rgba(255,255,255,.3)}
 .field .eye{
-  position:absolute;right:0.7em;top:50%;transform:translateY(-50%);
+  position:absolute;right:.75em;top:50%;transform:translateY(-50%);
   background:none;border:none;cursor:pointer;
-  color:rgba(255,255,255,0.35);padding:0.3em;border-radius:0.5em;
+  color:rgba(255,255,255,.35);padding:.3em;border-radius:.5em;
   transition:color .2s,background .2s;display:flex;
 }
-.field .eye:hover{color:#fff;background:rgba(255,255,255,0.07)}
+.field .eye:hover{color:#fff;background:rgba(255,255,255,.07)}
 .field .eye svg{width:1.2em;height:1.2em}
 
-/* === Slider === */
+/* ─── Slider ─────────────────────────────────────── */
 .slider{
   position:relative;
-  height:calc(var(--u)*2.9);
-  width:100%;max-width:24rem;
-  border-radius:980px;
+  height:clamp(44px, 5.5vh, 60px);
+  width:100%;
+  border-radius:var(--r);
   background:linear-gradient(135deg,#0a84ff,#5e9bff);
   overflow:hidden;
   user-select:none;-webkit-user-select:none;touch-action:none;
-  box-shadow:0 1vmin 4vmin rgba(10,132,255,0.35),inset 0 1px 0 rgba(255,255,255,0.18);
+  box-shadow:0 min(1.5vw,18px) min(5vw,50px) rgba(10,132,255,.3),inset 0 1px 0 rgba(255,255,255,.18);
   transition:transform .15s,box-shadow .3s;
 }
-.slider:hover{box-shadow:0 1.4vmin 5vmin rgba(10,132,255,0.45),inset 0 1px 0 rgba(255,255,255,0.18)}
-.slider:active{transform:scale(0.985)}
-.slider .fill{position:absolute;left:0;top:0;bottom:0;border-radius:980px;background:rgba(255,255,255,0.07);pointer-events:none}
+.slider:hover{box-shadow:0 min(2vw,22px) min(6vw,60px) rgba(10,132,255,.42),inset 0 1px 0 rgba(255,255,255,.18)}
+.slider:active{transform:scale(.985)}
+.slider .fill{position:absolute;left:0;top:0;bottom:0;border-radius:var(--r);background:rgba(255,255,255,.07);pointer-events:none}
 .slider .track{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.slider .lbl{color:#fff;font-size:calc(var(--u)*0.9);font-weight:600;letter-spacing:0.01em;pointer-events:none;transition:opacity .3s}
+.slider .lbl{
+  color:#fff;
+  font-size:clamp(13px, 1.1vw, 17px);
+  font-weight:600;letter-spacing:.01em;
+  pointer-events:none;transition:opacity .3s;
+}
 .slider .thumb{
-  position:absolute;left:0.28em;top:50%;transform:translateY(-50%);
-  height:calc(100% - 0.56em);aspect-ratio:1;border-radius:50%;
-  background:#fff;display:flex;align-items:center;justify-content:center;
-  cursor:grab;z-index:2;box-shadow:0 0.4vmin 1.5vmin rgba(0,0,0,0.25);
+  position:absolute;left:.28em;top:50%;transform:translateY(-50%);
+  height:calc(100% - .56em);aspect-ratio:1;border-radius:50%;
+  background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  cursor:grab;z-index:2;
+  box-shadow:0 2px 10px rgba(0,0,0,.2);
   transition:transform .12s;
 }
 .slider .thumb:hover{transform:translateY(-50%) scale(1.08)}
-.slider .thumb:active{cursor:grabbing;transform:translateY(-50%) scale(0.94)}
+.slider .thumb:active{cursor:grabbing;transform:translateY(-50%) scale(.94)}
 .slider .thumb svg{width:42%;height:42%;fill:none;stroke:#0a84ff;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.slider.ok{background:linear-gradient(135deg,#28a745,#34c759);box-shadow:0 1vmin 4vmin rgba(52,199,89,0.35)}
+.slider.ok{background:linear-gradient(135deg,#28a745,#34c759);box-shadow:0 min(1.5vw,18px) min(5vw,50px) rgba(52,199,89,.3)}
 .slider.ok .thumb svg{stroke:#34c759}
 
-/* === Trust === */
-.trust{display:flex;align-items:center;justify-content:center;gap:0.5em;margin-top:calc(var(--u)*1.2);color:rgba(255,255,255,0.28);font-size:calc(var(--u)*0.66);font-weight:500;letter-spacing:0.01em}
-.trust svg{width:1em;height:1em;fill:currentColor;opacity:0.7}
-
-/* === Messages === */
-.err{color:#ff6961;font-size:calc(var(--u)*0.72);margin-top:calc(var(--u)*0.7);display:none;animation:shake .35s}
+/* ─── Trust / messages ───────────────────────────── */
+.trust{
+  display:flex;align-items:center;justify-content:center;gap:.5em;
+  margin-top:clamp(16px, 2.5vh, 32px);
+  color:rgba(255,255,255,.26);
+  font-size:clamp(11px, .9vw, 14px);
+  font-weight:500;letter-spacing:.01em;
+}
+.trust svg{width:1em;height:1em;fill:currentColor;opacity:.7}
+.err{
+  color:#ff6961;
+  font-size:clamp(12px, 1vw, 15px);
+  margin-top:1em;display:none;
+  animation:shake .35s;
+}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
-.ld{display:none;margin-top:calc(var(--u)*0.7);color:#9a9aa2;font-size:calc(var(--u)*0.72)}
-.ld .sp{display:inline-block;width:1em;height:1em;border:2px solid rgba(255,255,255,0.1);border-top-color:#5e9bff;border-radius:50%;animation:spin .6s linear infinite;margin-right:0.5em;vertical-align:-0.15em}
+.ld{
+  display:none;margin-top:1em;
+  color:#9a9aa2;font-size:clamp(12px, 1vw, 15px);
+}
+.ld .sp{
+  display:inline-block;width:1em;height:1em;
+  border:2px solid rgba(255,255,255,.1);border-top-color:#5e9bff;
+  border-radius:50%;animation:spin .6s linear infinite;
+  margin-right:.5em;vertical-align:-.15em;
+}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
 <div class="bg">
-  <div class="glow g1"></div>
-  <div class="glow g2"></div>
-  <div class="glow g3"></div>
+  <div class="g g1"></div>
+  <div class="g g2"></div>
+  <div class="g g3"></div>
   <div class="grain"></div>
-  <div class="vignette"></div>
+  <div class="vig"></div>
 </div>
 
 <div class="main">
+
   <div class="orb-wrap">
     <div class="orb-glow"></div>
     <div class="orb"></div>
@@ -204,66 +254,113 @@ h1{
 
   <div class="overline">Enterprise Edition</div>
 
-  <h1>Shaping the Future of Software Development</h1>
+  <h1>Shaping the Future<br>of Software Development</h1>
 
   <p class="sub">AI-DLC for Enterprise Teams</p>
 
-  <div class="field">
-    <input type="password" id="pk" placeholder="Enter passkey" autocomplete="off" autofocus/>
-    <button class="eye" id="eye" type="button" aria-label="Toggle">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-    </button>
+  <div class="controls">
+    <div class="field">
+      <input type="password" id="pk" placeholder="Enter passkey" autocomplete="off" autofocus/>
+      <button class="eye" id="eye" type="button" aria-label="Toggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+
+    <div class="slider" id="sl">
+      <div class="fill" id="fl"></div>
+      <div class="track"><span class="lbl" id="lb">Slide to Unlock</span></div>
+      <div class="thumb" id="th"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+
+    <div class="err" id="er"></div>
+    <div class="ld" id="ld"><span class="sp"></span>Decrypting...</div>
+
+    <div class="trust">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+      <span>End-to-end encrypted · AES-256-GCM</span>
+    </div>
   </div>
 
-  <div class="slider" id="sl">
-    <div class="fill" id="fl"></div>
-    <div class="track"><span class="lbl" id="lb">Slide to Unlock</span></div>
-    <div class="thumb" id="th"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></div>
-  </div>
-
-  <div class="err" id="er"></div>
-  <div class="ld" id="ld"><span class="sp"></span>Decrypting...</div>
-
-  <div class="trust">
-    <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-    <span>End-to-end encrypted · AES-256-GCM</span>
-  </div>
 </div>
 
-<script id="__ENCRYPTED_PAYLOAD__" type="application/octet-stream">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</script>
+<script id="__ENCRYPTED_PAYLOAD__" type="application/octet-stream">+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</script>
 
 <script>
 (function(){
-  async function dk(p,s){const e=new TextEncoder();const k=await crypto.subtle.importKey('raw',e.encode(p),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:s,iterations:600000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']);}
+  async function dk(p,s){
+    const e=new TextEncoder();
+    const k=await crypto.subtle.importKey('raw',e.encode(p),'PBKDF2',false,['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2',salt:s,iterations:600000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']);
+  }
   function b(x){const s=atob(x);const a=new Uint8Array(s.length);for(let i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a;}
   async function dec(d,p){const r=b(d);return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:r.slice(16,28)},await dk(p,r.slice(0,16)),r.slice(28)));}
 
+  // Toggle visibility
   const inp=document.getElementById('pk'),eye=document.getElementById('eye');
   let vis=false;
-  eye.addEventListener('click',()=>{vis=!vis;inp.type=vis?'text':'password';eye.innerHTML=vis?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';});
+  const EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const EYEOFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  eye.addEventListener('click',()=>{vis=!vis;inp.type=vis?'text':'password';eye.innerHTML=vis?EYEOFF:EYE;});
 
-  const sl=document.getElementById('sl'),th=document.getElementById('th'),fl=document.getElementById('fl'),lb=document.getElementById('lb'),er=document.getElementById('er'),ld=document.getElementById('ld');
-  // PAD = thumb's resting left offset (set in CSS, in em → resolved to px)
-  const PAD=parseFloat(getComputedStyle(th).left)||4;
-  let drag=false,sx=0,tl=0; // tl = travel distance from rest position
-  function tw(){return th.offsetWidth;}
-  function mx(){return sl.offsetWidth-tw()-PAD*2;}
-  function set(x){tl=Math.max(0,Math.min(x,mx()));th.style.left=(PAD+tl)+'px';fl.style.width=(PAD+tl+tw()/2)+'px';lb.style.opacity=1-(tl/mx())*2.2;}
-  function rst(){th.style.transition='left .4s cubic-bezier(.16,1,.3,1)';fl.style.transition='width .4s cubic-bezier(.16,1,.3,1)';set(0);setTimeout(()=>{th.style.transition='';fl.style.transition='';},400);sl.classList.remove('ok');}
+  // Slider
+  const sl=document.getElementById('sl'),th=document.getElementById('th'),fl=document.getElementById('fl');
+  const lb=document.getElementById('lb'),er=document.getElementById('er'),ld=document.getElementById('ld');
+  let drag=false,sx=0,tl=0;
 
-  th.addEventListener('pointerdown',e=>{if(ld.style.display==='block')return;drag=true;sx=e.clientX-tl;th.setPointerCapture(e.pointerId);e.preventDefault();});
-  document.addEventListener('pointermove',e=>{if(!drag)return;set(e.clientX-sx);});
-  document.addEventListener('pointerup',async()=>{if(!drag)return;drag=false;if(tl/mx()>.85){sl.classList.add('ok');await go();}else rst();});
+  function PAD(){
+    // thumb's resting inset from edge (in CSS: left:.28em on slider font-size)
+    const s=parseFloat(getComputedStyle(sl).fontSize)||16;
+    return s*0.28;
+  }
+  function TW(){return th.offsetWidth;}
+  function MX(){return sl.offsetWidth-TW()-PAD()*2;}
+  function setPos(x){
+    tl=Math.max(0,Math.min(x,MX()));
+    th.style.left=(PAD()+tl)+'px';
+    fl.style.width=(PAD()+tl+TW()/2)+'px';
+    lb.style.opacity=1-(tl/MX())*2.2;
+  }
+  function reset(){
+    const ease='left .4s cubic-bezier(.16,1,.3,1)';
+    th.style.transition=ease;fl.style.transition='width .4s cubic-bezier(.16,1,.3,1)';
+    setPos(0);
+    setTimeout(()=>{th.style.transition='';fl.style.transition='';},400);
+    sl.classList.remove('ok');
+  }
+
+  th.addEventListener('pointerdown',e=>{
+    if(ld.style.display==='block')return;
+    drag=true;sx=e.clientX-tl;th.setPointerCapture(e.pointerId);e.preventDefault();
+  });
+  document.addEventListener('pointermove',e=>{if(!drag)return;setPos(e.clientX-sx);});
+  document.addEventListener('pointerup',async()=>{
+    if(!drag)return;drag=false;
+    if(MX()>0&&tl/MX()>.85){sl.classList.add('ok');await go();}
+    else reset();
+  });
 
   async function go(){
     const p=inp.value.trim();
-    if(!p){er.textContent='กรุณากรอก Passkey';er.style.display='block';rst();return;}
+    if(!p){er.textContent='กรุณากรอก Passkey';er.style.display='block';reset();return;}
     er.style.display='none';ld.style.display='block';
-    try{const h=await dec(document.getElementById('__ENCRYPTED_PAYLOAD__').textContent,p);document.open();document.write(h);document.close();}
-    catch{ld.style.display='none';er.textContent='Passkey ไม่ถูกต้อง';er.style.display='block';inp.select();rst();}
+    try{
+      const h=await dec(document.getElementById('__ENCRYPTED_PAYLOAD__').textContent,p);
+      document.open();document.write(h);document.close();
+    }catch{
+      ld.style.display='none';
+      er.textContent='Passkey ไม่ถูกต้อง';er.style.display='block';
+      inp.select();reset();
+    }
   }
 
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();th.style.transition='left .5s cubic-bezier(.16,1,.3,1)';fl.style.transition='width .5s cubic-bezier(.16,1,.3,1)';set(mx());sl.classList.add('ok');setTimeout(()=>{th.style.transition='';fl.style.transition='';go();},500);}});
+  inp.addEventListener('keydown',e=>{
+    if(e.key!=='Enter')return;
+    e.preventDefault();
+    th.style.transition='left .5s cubic-bezier(.16,1,.3,1)';
+    fl.style.transition='width .5s cubic-bezier(.16,1,.3,1)';
+    setPos(MX());sl.classList.add('ok');
+    setTimeout(()=>{th.style.transition='';fl.style.transition='';go();},500);
+  });
 })();
 </script>
 </body>
